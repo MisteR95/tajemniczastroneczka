@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wszystkiego Najlepszego!</title>
+    <link rel="stylesheet" href="stronka.css">
+</head>
+<body>
+    <div id="welcome-screen">
+        <div class="welcome-content">
+            <h1 class="welcome-title">Cześć Słońce...</h1>
+            <p class="welcome-subtitle">Pewnie się zastanawiasz co to kurwa za stronka, kliknij poniżej a się dowiesz ;)</p>
+            <button id="start-button">Kliknij tutaj</button>
+        </div>
+    </div>
+
+    <div class="main-wrapper">
+
+    <div class="main-wrapper">
+        
+        <div class="photo-wall">
+            <div class="photo-frame rotate-1">
+                <img src="zdjecie1.jpg" alt="Wspomnienie 1">
+            </div>
+            <div class="photo-frame rotate-2">
+                <img src="zdjecie22.jpg" alt="Wspomnienie 2">
+            </div>
+            <div class="photo-frame rotate-3">
+                <img src="zdjecie3.jpg" alt="Wspomnienie 3">
+            </div>
+            <div class="photo-frame rotate-1">
+                <img src="zdjecie4.jpg" alt="Wspomnienie 4">
+            </div>
+            <div class="photo-frame rotate-2" id="special-photo">
+                <img src="zdjecie55.jpg" alt="Wspomnienie 5">
+            </div>
+            <div class="photo-frame rotate-3">
+                <img src="zdjecie6.jpg" alt="Wspomnienie 6">
+            </div>
+
+            <div id="heart-container"></div>
+        </div>
+
+        <div class="content-area">
+            <div class="container">
+                <header>
+                    <h1 class="fade-in">Wszystkiego najlepszego, Słońce! 🎂</h1>
+                </header>
+                
+                <main>
+                    <div class="card-container" id="card">
+                        <div class="card-front">
+                            <p>Kliknij, aby otworzyć...</p>
+                            <div class="heart">❤️</div>
+                        </div>
+                        <div class="card-inside">
+                            <h2>Z całego serduszka:</h2>
+                            <p id="wishes-text">Życzę ci kochanie samych cudownych wspomnień w życiu, dużo pieniędzy, brak kurewskich znajomych (wiesz ocb), dużo pieniążków 💵💵 (szczególnie na twoje hobby), spełnienia wszelakich marzeń, zaczynając od pracy aż po rzeczy materialne. Kochanie życzę ci również, abyś znalazła swoją wymarzoną pracę, spełniała swoje marzenia i uśmiechała się na codzień, mimo że życie nie bywa lekkie 💕😁</p>
+                            <img src="gifek.gif" alt="GIF" class="media-box">
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+    </div>
+
+    <audio id="bg-music" src="muzyczka1.mp3" loop></audio>
+    <script src="skrypt.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const startButton = document.getElementById('start-button');
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const music = document.getElementById('bg-music'); 
+
+    if (startButton && welcomeScreen) {
+        startButton.addEventListener('click', () => {
+            console.log("Startujemy niespodziankę!");
+            welcomeScreen.classList.add('hidden-welcome');
+        });
+    } else {
+        console.error("Nie znaleziono przycisku lub ekranu powitalnego!");
+    }
+
+    const card = document.getElementById('card');
+    if (card) {
+        card.addEventListener('click', function() {
+            this.classList.toggle('open');
+            const inside = document.querySelector('.card-inside');
+            const front = document.querySelector('.card-front');
+            
+            if (this.classList.contains('open')) {
+                front.style.display = 'none';
+                inside.style.display = 'block';
+                if (music) {
+                    music.volume = 0.2; 
+                    music.play(); 
+                }
+            } else {
+                front.style.display = 'block';
+                inside.style.display = 'none';
+                if (music) {
+                    music.pause(); 
+                    music.currentTime = 0; 
+                }
+            }
+        });
+    }
+
+    document.addEventListener('mousedown', function() {
+    console.log("Kliknięto - generuję serce na ściance...");
+    const heartContainer = document.getElementById('heart-container');
+    
+    if (!heartContainer) {
+        console.error("Nie znaleziono #heart-container w HTML!");
+        return;
+    }
+
+    const count = 40; 
+    const scale = 9; 
+
+    heartContainer.innerHTML = '';
+
+    for (let i = 0; i < count; i++) {
+        const t = (i / count) * 2 * Math.PI;
+        const x = 16 * Math.pow(Math.sin(t), 3);
+        const y = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t));
+
+        const text = document.createElement('span');
+        text.innerText = 'i love you';
+        text.className = 'heart-text';
+        
+        const centerX = heartContainer.offsetWidth / 2;
+        const centerY = heartContainer.offsetHeight / 2;
+
+        text.style.left = `${centerX + (x * scale)}px`;
+        text.style.top = `${centerY + (y * scale)}px`;
+        
+        text.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
+        text.style.animationDelay = `${Math.random() * 2}s`;
+        
+        heartContainer.appendChild(text);
+    }
+}, { once: true });
+});
+
+setInterval(createFallingParticle, 150);
+
+function createFallingParticle() {
+    const particle = document.createElement('div');
+    particle.classList.add('particle');
+    
+    const emojis = ['❤️', '💖', '🎉', '✨'];
+    particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    
+    particle.style.left = Math.random() * 100 + 'vw';
+    
+    const duration = Math.random() * 3 + 3; 
+    particle.style.setProperty('--duration', duration + 's');
+    
+    document.body.appendChild(particle);
+    
+    setTimeout(() => {
+        particle.remove();
+    }, 7000);
+}
+
+
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #4a4a4a;
+    overflow: hidden;
+}
+
+.main-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.photo-wall {
+    flex: 0 0 40%;
+    height: 100%;
+    background-image: url('tlo.jpg');
+    background-size: cover;
+    background-position: center;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    align-content: flex-start;
+    box-shadow: inset -15px 0 30px rgba(0,0,0,0.5);
+    overflow-y: auto;
+}
+
+.photo-frame {
+    background: white;
+    padding: 10px 10px 35px 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    margin: 15px;
+    width: 140px;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.photo-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.photo-frame:hover {
+    transform: scale(1.15) rotate(0deg) !important;
+    z-index: 10;
+}
+
+.rotate-1 { transform: rotate(-5deg); }
+.rotate-2 { transform: rotate(5deg); }
+.rotate-3 { transform: rotate(-8deg); }
+
+#heart-container {
+    position: relative;
+    width: 100%;       
+    height: 350px;      
+    margin-top: 50px;   
+    margin-bottom: 50px;
+    flex-basis: 100%;   
+    display: block;     
+}
+
+.heart-text {
+    position: absolute;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #c53a3a;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    white-space: nowrap;
+    user-select: none;
+    opacity: 0;
+    transform-origin: center; 
+    animation: heartFadeIn 2s forwards;
+}
+
+.content-area {
+    flex: 1;
+    background-color: #fff5f8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+}
+
+.card-container {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-container.open {
+    transform: scale(1.05);
+}
+
+.card-inside {
+    display: none;
+    animation: fadeIn 1s forwards;
+}
+
+.media-box {
+    width: 100%;
+    max-width: 300px;
+    border-radius: 12px;
+    margin-top: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.heart {
+    font-size: 50px;
+    animation: pulse 1.5s infinite;
+}
+
+/* --- ANIMACJE --- */
+.particle {
+    position: fixed;
+    top: 0;
+    pointer-events: none;
+    font-size: 24px;
+    z-index: 9999;
+    animation: continuousFall var(--duration, 4s) ease-in forwards;
+}
+
+#welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000; /* Czarne tło */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000; /* Musi być wyżej niż wszystko inne */
+    transition: opacity 1s ease, visibility 1s; /* Płynne znikanie */
+    color: white;
+    text-align: center;
+}
+
+.welcome-content {
+    animation: fadeIn 2s ease;
+}
+
+.welcome-title {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.welcome-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.8;
+}
+
+#start-button {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+    padding: 15px 40px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+#start-button:hover {
+    background: white;
+    color: black;
+    transform: scale(1.1);
+}
+
+/* Klasa, którą dodamy w JS, żeby ukryć ekran */
+.hidden-welcome {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+#special-photo {
+    width: 250px; /* Zwiększamy szerokość całej ramki z 140px na 250px */
+    z-index: 5;   /* Sprawia, że większe zdjęcie będzie "nad" mniejszymi, jeśli na siebie wejdą */
+}
+
+/* Jeśli chcesz, żeby po najechaniu myszką powiększało się jeszcze bardziej: */
+#special-photo:hover {
+    transform: scale(1.1) rotate(0deg) !important;
+}
+
+@keyframes heartFadeIn {
+    0% { opacity: 0; transform: scale(0.8) translateY(10px); }
+    100% { opacity: 0.7; transform: scale(1) translateY(0); }
+}
+
+@keyframes continuousFall {
+    0% { transform: translateY(-24px) rotate(0deg); opacity: 0.5; }
+    10% { transform: translateY(0) rotate(10deg); opacity: 1; }
+    100% { transform: translateY(105vh) rotate(360deg); opacity: 0; }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
